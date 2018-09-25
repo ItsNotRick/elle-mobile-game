@@ -1,0 +1,19 @@
+﻿<Properties StartupConfiguration="{30474976-9C0A-AC38-1224-8B16898D1F73}|">
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/VoiceQuizMechanics.cs">
+    <Files>
+      <File FileName="Assets/Scripts/Level1WordBank.cs" Line="84" Column="20" />
+      <File FileName="Assets/Scripts/ObstacleLoad.cs" Line="13" Column="1" />
+      <File FileName="Assets/Scripts/MusicPlayer.cs" Line="31" Column="1" />
+      <File FileName="Assets/Scripts/VoiceQuizMechanics.cs" Line="204" Column="1" />
+      <File FileName="Assets/Scripts/InGameOptions.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/MainMenu.cs" Line="75" Column="34" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>
