@@ -236,12 +236,12 @@ public class LocalLanguagePacksData
 		imagesForTerms = new ArrayList();
 
 		string[] parsed, termsParsed, englishParsed, imagesParsed;
-		for (int i = 0; i < items.Length - 1; i++)
+		for (int i = 0; i < items.Length/* - 1*/; i++)
 		{
 			parsed = items[i].Split('|');
-			termsParsed = parsed[0].Split(':');
-			englishParsed = parsed[1].Split(':');
-			imagesParsed = parsed[5].Split(':');
+			termsParsed = parsed[0].Split('&');
+			englishParsed = parsed[1].Split('&');
+			imagesParsed = parsed[5].Split('&');
 
 			// Adds the fields to the corresponding arraylists
 			if (parsed[2].Contains(genre))

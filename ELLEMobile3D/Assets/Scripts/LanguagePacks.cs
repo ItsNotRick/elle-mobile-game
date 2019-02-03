@@ -15,9 +15,10 @@ public class LanguagePacks : MonoBehaviour
 	// Use this for initialization
 	IEnumerator Start()
 	{
-		WWW languagepacks = new WWW("http://10.171.204.188/ELLEMobile/LanguagePacks.php");
-		yield return languagepacks;
-		string lp = languagepacks.text;
+        //WWW languagepacks = new WWW("http://10.171.204.188/ELLEMobile/LanguagePacks.php");
+        //yield return languagepacks;
+        yield return "asdf";
+        string lp = "portu; spanish; qwer";//languagepacks.text;
 		//ParseLps (lp);
 		languages = lp.Split(';');
 		selected = 0;
