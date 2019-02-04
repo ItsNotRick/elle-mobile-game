@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEditor;
 using System.Text.RegularExpressions;
 using System;
 using UnityEngine.SceneManagement;
@@ -12,6 +13,7 @@ public class Account
 {
     public string id { get; set; }
     public string access_token { get; set; }
+    public string permissions { get; set; }
 }
 
 public class LoginManager : MonoBehaviour 
@@ -20,22 +22,32 @@ public class LoginManager : MonoBehaviour
     public InputField usernameRegisterField, passwordRegisterField, passwordConfirmField;
     public Text registrationErrorText, registrationCompleteText, submissionText, submissionErrorText;
 
+    [SerializeField]
+    public SessionManager session;
+
 	private string createAccountURL = "https://endlesslearner.com/register";
     private string loginAccountURL = "https://endlesslearner.com/login";
 
     private bool usernameTaken;
 	private bool passwordSaved;
 	// Use this for initialization
-	void Start () 
+	void Start ()
     {
         usernameTaken = false;
+        //session = ScriptableObject.Instantiate<SessionManager>();
 
 		if (PlayerPrefs.GetString("Username").Length > 0)
 		{
 			usernameField.text = PlayerPrefs.GetString("Username");
 			passwordField.text = PlayerPrefs.GetString("Password");
 		}
-	}
+
+        //TODO Actually test connection here!
+        if (session.access_token.Length > 0)
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+    }
 	
     public void OnLoginClick()
     {
@@ -136,24 +148,26 @@ public class LoginManager : MonoBehaviour
             new MultipartFormDataSection("password", "ii"),
         };
 
-        UnityWebRequest www = UnityWebRequest.Post(createAccountURL, formData);
-        yield return www;
+        UnityWebRequest www = UnityWebRequest.Post(loginAccountURL, formData);
+        yield return www.SendWebRequest();
 
-        String dat = www.downloadHandler.text;
-        Debug.Log(dat);
+        string dat = www.downloadHandler.text;
 
         if (!dat.Contains("Invalid credentials!"))
         {
             Account user = JsonConvert.DeserializeObject<Account>(dat);
+            //submissionText.text = user.id + " - logging in...";
+            //submissionErrorText.text = "";
+            session.access_token = user.access_token;
+            session.id = user.id;
+            EditorUtility.SetDirty(session);
             SceneManager.LoadScene("MainMenu");
-            submissionText.text = user.id + " - logging in...";
-            submissionErrorText.text = "";
-          /*string[] terms = dat.Split('|');
-            PlayerPrefs.SetInt("UserID", int.Parse(terms[1].TrimEnd(';')));
-            PlayerPrefs.SetString("Username", username);
-			submissionText.text = terms[0] + " - logging in...";
-            submissionErrorText.text = "";
-            SceneManager.LoadScene("MainMenu");*/
+            /*string[] terms = dat.Split('|');
+              PlayerPrefs.SetInt("UserID", int.Parse(terms[1].TrimEnd(';')));
+              PlayerPrefs.SetString("Username", username);
+              submissionText.text = terms[0] + " - logging in...";
+              submissionErrorText.text = "";
+              SceneManager.LoadScene("MainMenu");*/
         }
         else
         {
