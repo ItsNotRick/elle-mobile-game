@@ -12,15 +12,13 @@ public class LanguagePacks : MonoBehaviour
 	public Text testText;
 	private int selected;
 
+    [SerializeField]
+    SessionManager session;
+
 	// Use this for initialization
-	IEnumerator Start()
+	void Start()
 	{
-        //WWW languagepacks = new WWW("http://10.171.204.188/ELLEMobile/LanguagePacks.php");
-        //yield return languagepacks;
-        yield return "asdf";
-        string lp = "portu; spanish; qwer";//languagepacks.text;
-		//ParseLps (lp);
-		languages = lp.Split(';');
+        languages = session.decks.names.ToArray();
 		selected = 0;
 		GenerateLpDisplay();
 		testText.text = PlayerPrefs.GetString("Language Pack");

@@ -45,7 +45,10 @@ public class GroundGeneration : MonoBehaviour {
 	private static LocalLanguagePacksData languagePack;
 	private string genre;
 	int[] indexes = { 0, 0, 0 };
-	private bool languagePackLoaded = false;
+	private bool languagePackLoaded = true;
+
+    [SerializeField]
+    private SessionManager session;
 
 	string[] fullWordOptions = new string[3];
 	public List<string> selection = new List<string> ();
@@ -73,9 +76,11 @@ public class GroundGeneration : MonoBehaviour {
 			chanceOfObstacleSpawn = 0.75f;
 		}
 
-		// Quiz Mechanics
+
+
+		/*// Quiz Mechanics
 		if (!languagePackLoaded)
-			StartCoroutine(LoadLanguagePack());
+			StartCoroutine(LoadLanguagePack());*/
 	}
 
 	IEnumerator LoadLanguagePack()
