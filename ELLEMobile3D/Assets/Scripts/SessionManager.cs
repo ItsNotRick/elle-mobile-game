@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.Networking;
 using UnityEngine;
 using Newtonsoft.Json;
+using System;
 
-
-public class Decks
-{
-    public List<string> ids { get; set; }
-    public List<string> names { get; set; }
-}
 
 // This class is utilized in both this script and the "VoiceQuizMechanics" script.
 // This class stores the language pack pulled at the start of the scene.
@@ -115,9 +110,9 @@ public class SessionManager : ScriptableObject
     public string id = "";
 
     [SerializeField]
-    public Dictionary<string, string> deckPaths;
+    public Dictionary<Tuple<int, string>, string> deckPaths;
 
     [SerializeField]
-    public Decks decks;
+    public List<Tuple<int, string>> decks;
 
 }

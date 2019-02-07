@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
+using System.Linq;
 
 public class Account
 {
@@ -172,6 +173,14 @@ public class LoginManager : MonoBehaviour
         }
     }
 
+    public class DecksJson
+    {
+        public List<int> ids { get; set; }
+        public List<string> names { get; set; }
+
+    }
+
+
     IEnumerator GetDeckNames()
     {
         UnityWebRequest www = UnityWebRequest.Get("https://endlesslearner.com/decks");
@@ -182,9 +191,9 @@ public class LoginManager : MonoBehaviour
 
         if (!decks.Contains("Invalid credentials!"))
         {
-            Decks deckList = JsonConvert.DeserializeObject<Decks>(decks);
-            session.decks = deckList;
-            Debug.Log(decks);
+            DecksJson deckLists = JsonConvert.DeserializeObject<DecksJson>(decks);
+            session.decks = deckLists.ids.Zip(deckLists.names, (a, b) => new Tuple<int, string>(a, b)).ToList();
+            //Debug.Log(decks);
             //EditorUtility.SetDirty(session);
         }
     }

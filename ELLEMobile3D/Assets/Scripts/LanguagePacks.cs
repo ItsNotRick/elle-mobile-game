@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 public class LanguagePacks : MonoBehaviour 
 {
-	private string[] languages;
+	private Tuple<int, string>[] languages;
 	public Text[] languageDisplay;
 	public Text lpText;
 	public Text testText;
@@ -18,7 +19,7 @@ public class LanguagePacks : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-        languages = session.decks.names.ToArray();
+        languages = session.decks.ToArray();
 		selected = 0;
 		GenerateLpDisplay();
 		testText.text = PlayerPrefs.GetString("Language Pack");
@@ -31,7 +32,7 @@ public class LanguagePacks : MonoBehaviour
 			selected = languages.Length - 2;
 		}
 
-		lpText.text = languages[selected % (languages.Length - 1)];
+		lpText.text = languages[selected % (languages.Length - 1)].Item2;
 	}
 
 	public void LeftButton()
@@ -48,7 +49,7 @@ public class LanguagePacks : MonoBehaviour
 
 	public void SelectButton()
 	{
-		PlayerPrefs.SetString("Language Pack", languages[selected % (languages.Length - 1)]);
+		PlayerPrefs.SetString("Language Pack", languages[selected % (languages.Length - 1)].Item2);
 		testText.text = PlayerPrefs.GetString("Language Pack");
 	}
 
