@@ -7,11 +7,11 @@ using UnityEngine.UI;
 
 public class LanguagePacks : MonoBehaviour 
 {
-	private Tuple<int, string>[] languages;
+	private DeckInfo[] languages;
 	public Text[] languageDisplay;
 	public Text lpText;
 	public Text testText;
-	private int selected;
+	private uint selected;
 
     [SerializeField]
     SessionManager session;
@@ -27,17 +27,13 @@ public class LanguagePacks : MonoBehaviour
 
 	private void GenerateLpDisplay()
 	{
-		if (selected < 0)
-		{
-			selected = languages.Length - 2;
-		}
-
-		lpText.text = languages[selected % (languages.Length - 1)].Item2;
+        //TODO: CHECK IF LENGTH IS < 1
+		lpText.text = languages[selected % (languages.Length)].name;
 	}
 
 	public void LeftButton()
 	{
-		selected--;
+		selected += (uint) languages.Length - 1;
 		GenerateLpDisplay();
 	}
 
@@ -49,7 +45,7 @@ public class LanguagePacks : MonoBehaviour
 
 	public void SelectButton()
 	{
-		PlayerPrefs.SetString("Language Pack", languages[selected % (languages.Length - 1)].Item2);
+		PlayerPrefs.SetString("Language Pack", languages[selected % (languages.Length)].name);
 		testText.text = PlayerPrefs.GetString("Language Pack");
 	}
 

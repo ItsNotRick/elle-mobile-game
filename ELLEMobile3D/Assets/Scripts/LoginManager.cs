@@ -9,6 +9,8 @@ using System;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 using System.Linq;
+using System.IO;
+using System.IO.Compression;
 
 public class Account
 {
@@ -27,8 +29,9 @@ public class LoginManager : MonoBehaviour
     [SerializeField]
     private SessionManager session;
 
-	private string createAccountURL = "https://endlesslearner.com/register";
-    private string loginAccountURL = "https://endlesslearner.com/login";
+    private static string baseURL = "https://endlesslearner.com/";
+	private static string createAccountURL = baseURL + "register";
+    private static string loginAccountURL = baseURL + "login";
 
     private bool usernameTaken;
 	private bool passwordSaved;
@@ -47,7 +50,7 @@ public class LoginManager : MonoBehaviour
         //TODO Actually test connection here!
         if (session.access_token.Length > 0)
         {
-            //SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene("MainMenu");
         }
     }
 	
@@ -173,17 +176,12 @@ public class LoginManager : MonoBehaviour
         }
     }
 
-    public class DecksJson
-    {
-        public List<int> ids { get; set; }
-        public List<string> names { get; set; }
 
-    }
 
 
     IEnumerator GetDeckNames()
     {
-        UnityWebRequest www = UnityWebRequest.Get("https://endlesslearner.com/decks");
+        UnityWebRequest www = UnityWebRequest.Get(baseURL + "decks");
         www.SetRequestHeader("Authorization", "Bearer " + session.access_token);
         yield return www.SendWebRequest();
 
@@ -192,9 +190,46 @@ public class LoginManager : MonoBehaviour
         if (!decks.Contains("Invalid credentials!"))
         {
             DecksJson deckLists = JsonConvert.DeserializeObject<DecksJson>(decks);
-            session.decks = deckLists.ids.Zip(deckLists.names, (a, b) => new Tuple<int, string>(a, b)).ToList();
+            session.decks = deckLists.ids.Zip(deckLists.names, (a, b) => new DeckInfo(a, b)).ToList();
             //Debug.Log(decks);
-            //EditorUtility.SetDirty(session);
+            EditorUtility.SetDirty(session);
+            yield return StartCoroutine(DownloadDecks());
         }
     }
+
+    // TODO: Redownload if hash doesn't match!
+    IEnumerator DownloadDecks()
+    {
+        List<DeckInfo> invalids = new List<DeckInfo>();
+        foreach (DeckInfo d in session.decks)
+        {
+            string packPath = "Assets/LanguagePacks/" + d.id;
+            UnityWebRequest www = UnityWebRequest.Get(baseURL + "deck/zip/" + d.id);
+            www.SetRequestHeader("Authorization", "Bearer " + session.access_token);
+            yield return www.SendWebRequest();
+            if (Directory.Exists(packPath)) Directory.Delete(packPath, true);
+            using (BinaryWriter writer = new BinaryWriter(File.Open(packPath + ".zip", FileMode.Create)))
+            {
+                writer.Write(www.downloadHandler.data);
+            }
+            if (new FileInfo(packPath + ".zip").Length < 50)
+            {
+                invalids.Add(d);
+            } else
+            {
+                ZipFile.ExtractToDirectory(packPath + ".zip", packPath);
+            }
+            File.Delete(packPath + ".zip");
+        }
+        foreach (DeckInfo d in invalids)
+        {
+            session.decks.Remove(d);
+        }
+        foreach (var t in session.decks)
+        {
+            Debug.Log(t);
+        }
+        EditorUtility.SetDirty(session);
+    }
+
 }

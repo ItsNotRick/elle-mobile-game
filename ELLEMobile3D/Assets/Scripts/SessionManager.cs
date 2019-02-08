@@ -109,10 +109,27 @@ public class SessionManager : ScriptableObject
     [SerializeField]
     public string id = "";
 
-    [SerializeField]
-    public Dictionary<Tuple<int, string>, string> deckPaths;
+    //public Dictionary<Tuple<int, string>, string> deckPaths;
 
-    [SerializeField]
-    public List<Tuple<int, string>> decks;
+    public List<DeckInfo> decks;
 
+}
+
+
+public class DecksJson
+{
+    public List<int> ids { get; set; }
+    public List<string> names { get; set; }
+}
+
+[Serializable]
+public class DeckInfo
+{
+    public DeckInfo(int id_, string name_)
+    {
+        id = id_;
+        name = name_;
+    }
+    public int id;
+    public string name;
 }
