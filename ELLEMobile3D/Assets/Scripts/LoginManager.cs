@@ -5,9 +5,10 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEditor;
 using System.Text.RegularExpressions;
-using System;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
+using System.Linq;
+
 
 public class Account
 {
@@ -16,6 +17,7 @@ public class Account
     public string permissions { get; set; }
 }
 
+
 public class LoginManager : MonoBehaviour 
 {
     public InputField usernameField, passwordField;
@@ -23,10 +25,11 @@ public class LoginManager : MonoBehaviour
     public Text registrationErrorText, registrationCompleteText, submissionText, submissionErrorText;
 
     [SerializeField]
-    public SessionManager session;
+    private SessionManager session;
 
-	private string createAccountURL = "https://endlesslearner.com/register";
-    private string loginAccountURL = "https://endlesslearner.com/login";
+    private static string baseURL = "https://endlesslearner.com/";
+	private static string createAccountURL = baseURL + "register";
+    private static string loginAccountURL = baseURL + "login";
 
     private bool usernameTaken;
 	private bool passwordSaved;
@@ -139,13 +142,13 @@ public class LoginManager : MonoBehaviour
         passwordConfirmField.text = "";
 	}
 
-    IEnumerator LoginAccount(string username, string passwordHash)
+    IEnumerator LoginAccount(string username, string password)
     {
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>
         {
             // Fields must be the same as they are in the Python script on the server
-            new MultipartFormDataSection("username", "ii"),
-            new MultipartFormDataSection("password", "ii"),
+            new MultipartFormDataSection("username", username),
+            new MultipartFormDataSection("password", password),
         };
 
         UnityWebRequest www = UnityWebRequest.Post(loginAccountURL, formData);
@@ -156,18 +159,13 @@ public class LoginManager : MonoBehaviour
         if (!dat.Contains("Invalid credentials!"))
         {
             Account user = JsonConvert.DeserializeObject<Account>(dat);
-            //submissionText.text = user.id + " - logging in...";
-            //submissionErrorText.text = "";
+            submissionText.text = user.id + " - logging in...";
+            submissionErrorText.text = "";
             session.access_token = user.access_token;
             session.id = user.id;
+            yield return StartCoroutine(GetDeckNames());
             EditorUtility.SetDirty(session);
             SceneManager.LoadScene("MainMenu");
-            /*string[] terms = dat.Split('|');
-              PlayerPrefs.SetInt("UserID", int.Parse(terms[1].TrimEnd(';')));
-              PlayerPrefs.SetString("Username", username);
-              submissionText.text = terms[0] + " - logging in...";
-              submissionErrorText.text = "";
-              SceneManager.LoadScene("MainMenu");*/
         }
         else
         {
@@ -176,4 +174,24 @@ public class LoginManager : MonoBehaviour
         }
     }
 
+
+
+
+    IEnumerator GetDeckNames()
+    {
+        UnityWebRequest www = UnityWebRequest.Get(baseURL + "decks");
+        www.SetRequestHeader("Authorization", "Bearer " + session.access_token);
+        yield return www.SendWebRequest();
+
+        string decks = www.downloadHandler.text;
+
+        if (!decks.Contains("Invalid credentials!"))
+        {
+            DecksJson deckLists = JsonConvert.DeserializeObject<DecksJson>(decks);
+            session.decks = deckLists.ids.Zip(deckLists.names, (a, b) => new DeckInfo(a, b)).ToList();
+            //Debug.Log(decks);
+            EditorUtility.SetDirty(session);
+            yield return StartCoroutine(session.DownloadDecks());
+        }
+    }
 }

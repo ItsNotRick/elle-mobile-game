@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,21 +7,19 @@ using UnityEngine.UI;
 
 public class LanguagePacks : MonoBehaviour 
 {
-	private string[] languages;
+	private DeckInfo[] languages;
 	public Text[] languageDisplay;
 	public Text lpText;
 	public Text testText;
-	private int selected;
+	private uint selected;
+
+    [SerializeField]
+    SessionManager session;
 
 	// Use this for initialization
-	IEnumerator Start()
+	void Start()
 	{
-        //WWW languagepacks = new WWW("http://10.171.204.188/ELLEMobile/LanguagePacks.php");
-        //yield return languagepacks;
-        yield return "asdf";
-        string lp = "portu; spanish; qwer";//languagepacks.text;
-		//ParseLps (lp);
-		languages = lp.Split(';');
+        languages = session.decks.ToArray();
 		selected = 0;
 		GenerateLpDisplay();
 		testText.text = PlayerPrefs.GetString("Language Pack");
@@ -28,17 +27,13 @@ public class LanguagePacks : MonoBehaviour
 
 	private void GenerateLpDisplay()
 	{
-		if (selected < 0)
-		{
-			selected = languages.Length - 2;
-		}
-
-		lpText.text = languages[selected % (languages.Length - 1)];
+        //TODO: CHECK IF LENGTH IS < 1
+		lpText.text = languages[selected % (languages.Length)].name;
 	}
 
 	public void LeftButton()
 	{
-		selected--;
+		selected += (uint) languages.Length - 1;
 		GenerateLpDisplay();
 	}
 
@@ -50,9 +45,10 @@ public class LanguagePacks : MonoBehaviour
 
 	public void SelectButton()
 	{
-		PlayerPrefs.SetString("Language Pack", languages[selected % (languages.Length - 1)]);
-		testText.text = PlayerPrefs.GetString("Language Pack");
-	}
+		PlayerPrefs.SetString("Language Pack Name", languages[selected % (languages.Length)].name);
+		testText.text = PlayerPrefs.GetString("Language Pack Name");
+        PlayerPrefs.SetInt("Language Pack ID", languages[selected % (languages.Length)].id);
+    }
 
 	public void BackToMainMenu()
 	{

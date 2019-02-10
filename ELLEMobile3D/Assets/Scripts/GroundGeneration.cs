@@ -41,11 +41,11 @@ public class GroundGeneration : MonoBehaviour {
 	private Vector3 obstaclePosition;
 
 	// Quiz Mechanics 
-	private string[] items;
-	private static LocalLanguagePacksData languagePack;
-	private string genre;
+	private static LanguagePackInterface languagePack;
 	int[] indexes = { 0, 0, 0 };
-	private bool languagePackLoaded = false;
+
+    [SerializeField]
+    private SessionManager session;
 
 	string[] fullWordOptions = new string[3];
 	public List<string> selection = new List<string> ();
@@ -57,7 +57,7 @@ public class GroundGeneration : MonoBehaviour {
 	void Start () 
 	{
 		startPlayerPostion = Player.transform.position;
-		Random.seed = (int)System.DateTime.Now.Ticks;
+        Random.InitState((int)System.DateTime.Now.Ticks);
 		difficulty = PlayerPrefs.GetInt ("Difficulty Setting");
 
 		// This is used to trigger loading of platforms
@@ -73,26 +73,18 @@ public class GroundGeneration : MonoBehaviour {
 			chanceOfObstacleSpawn = 0.75f;
 		}
 
-		// Quiz Mechanics
-		if (!languagePackLoaded)
-			StartCoroutine(LoadLanguagePack());
-	}
-
-	IEnumerator LoadLanguagePack()
-	{
-        //WWW termsData = new WWW("http://10.171.204.188/ELLEMobile/TermData.php");
-        yield return "";//termsData;
-        string termData = "term&cara | english&face | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&perna | english&leg | language&portuguese | pos & asdf | def & asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&mundo | english&world | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg;, term&sal | english&salt | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&mão | english&hand | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&estômago | english&stomach | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&nariz | english&nose | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&boca | english&mouth | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&carne | english&meat | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&pessoa | english&person | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&Estrela | english&star | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&Dom | english&sun | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&casa | english&house | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&cabeça | english&head | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&orelha | english&ear | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&neve | english&snow | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&nuvem | english&cloud | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&montanha | english&mountain | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&remédio | english&medicine | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&agua | english&water | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg; term&fogo | english&fire | language&portuguese | pos&asdf | def&asdf | img&https://st2.depositphotos.com/1051435/5912/i/950/depositphotos_59124781-stock-photo-red-cat-wearing-santa-hat.jpg "; //termsData.text;
-		genre = PlayerPrefs.GetString("Language Pack");
-
-		// This function parses the termData into the items string array
-		ParseTerms(termData);
-		languagePack = new LocalLanguagePacksData(items, genre);
-        languagePack.RemoveTermsWithNoImages();
-		UpdateIndexes();
-
-		languagePackLoaded = true;
-	}
+        int id = PlayerPrefs.GetInt("Language Pack ID");
+        foreach(DeckInfo d in session.decks)
+        {
+            if (d.id == id)
+            {
+                languagePack = new LanguagePackInterface(d);
+                break;
+            }
+        }
+        UpdateIndexes();
+        //languagePack.RemoveTermsWithNoImages();
+    }
 
 	public void UpdateIndexes()
 	{
@@ -115,17 +107,11 @@ public class GroundGeneration : MonoBehaviour {
 		}
 	}
 
-
-	private void ParseTerms(string termData)
-	{
-		items = termData.Split(';');
-	}
-
 	// Once per frame if the player completes a ground platform the game will
 	//spawn a ground platform two platforms ahead.
 	void Update () 
 	{
-		if (PlayerPrefs.GetInt("QuizImagesSpawned") == 0 && languagePackLoaded) 
+		if (PlayerPrefs.GetInt("QuizImagesSpawned") == 0) 
 		{
 			PlayerPrefs.SetInt("QuizImagesSpawned", 1);
 
@@ -247,13 +233,13 @@ public class GroundGeneration : MonoBehaviour {
 		switch (choiceLane)
 		{
 			case 0:
-			obstaclePosition = new Vector3(-14f, 6f, newGroundPosition.z);
+			obstaclePosition = new Vector3(-12f, 6f, newGroundPosition.z);
 			break;
 			case 1:
 			obstaclePosition = new Vector3(-5f, 6f, newGroundPosition.z);
 			break;
 			case 2:
-			obstaclePosition = new Vector3(4f, 6f, newGroundPosition.z);
+			obstaclePosition = new Vector3(2f, 6f, newGroundPosition.z);
 			break;
 			default:
 			obstaclePosition = new Vector3(-17f, 2.5f, newGroundPosition.z);
@@ -261,34 +247,27 @@ public class GroundGeneration : MonoBehaviour {
 		}
 
 		choiceText = (GameObject)Instantiate(quizChoiceText, obstaclePosition, transform.rotation);
-		//choiceText.GetComponent<TextMesh>().text = languagePack.englishTerms[indexes[choiceIndex]].ToString();
-        StartCoroutine(GrabImage(/*"http://10.171.204.188/ELLEMobile/Images/" + */languagePack.imagesForTerms[indexes[choiceIndex]].ToString(), choiceText));
-        choiceText.name = languagePack.terms[indexes[choiceIndex]].ToString();
+        //choiceText.GetComponent<TextMesh>().text = languagePack.englishTerms[indexes[choiceIndex]].ToString();
+        Card c = languagePack.Cards[indexes[choiceIndex]];
+        Rect rect = new Rect(0, 0, c.img.width, c.img.height);
+        choiceText.GetComponent<SpriteRenderer>().sprite = Sprite.Create(c.img, rect, new Vector2(.5f, .5f), 100f);
+        choiceText.GetComponent<SpriteRenderer>().drawMode = SpriteDrawMode.Sliced;
+        choiceText.GetComponent<SpriteRenderer>().size = new Vector2(24, 6);
+
+        choiceText.name = languagePack.Cards[indexes[choiceIndex]].destTerm.ToString();
 		fullWordOptions [choiceIndex] = choiceText.name;
 		if (choiceIndex == 2) {
 			incorrect.Add(fullWordOptions[0] + "," + fullWordOptions[1] +","+fullWordOptions[2]+"," );
 		}
 		if (generatedWordDisplay.text == "")
 		{
-			generatedWordDisplay.text = languagePack.terms[indexes[choiceIndex]].ToString();
+			generatedWordDisplay.text = languagePack.Cards[indexes[choiceIndex]].destTerm.ToString();
 		}
 
 		int chance = Random.Range(0, 2);
 		if (chance == 1)
 		{
-			generatedWordDisplay.text = languagePack.terms[indexes[choiceIndex]].ToString();
+			generatedWordDisplay.text = languagePack.Cards[indexes[choiceIndex]].destTerm.ToString();
 		}
 	}
-
-    IEnumerator GrabImage(string url, GameObject cardImage)
-    {
-        WWW www = new WWW(url);
-        yield return www;
-        // The last two fields in the rect determine the sprites size
-        cardImage.GetComponent<SpriteRenderer>().sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(.5f, .5f), 100f);
-
-        // Adjusts the scaling of the card
-        cardImage.GetComponent<SpriteRenderer>().drawMode = SpriteDrawMode.Sliced;
-        cardImage.GetComponent<SpriteRenderer>().size = new Vector2(12, 6);
-    }
 }
