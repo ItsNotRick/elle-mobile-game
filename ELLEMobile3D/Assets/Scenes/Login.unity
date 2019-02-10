@@ -3913,59 +3913,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1692004231
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1692004233}
-  - component: {fileID: 1692004232}
-  m_Layer: 0
-  m_Name: LoginManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1692004232
+--- !u!114 &1692004232 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 8357935741150535987, guid: 2583a1ef2858011459af21bf0b666889,
+    type: 3}
+  m_PrefabInstance: {fileID: 8357935741741321915}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1692004231}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68aed4605b1bd564ab102b3d010b3beb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usernameField: {fileID: 547443732}
-  passwordField: {fileID: 1375160361}
-  usernameRegisterField: {fileID: 1014621008}
-  passwordRegisterField: {fileID: 1541286248}
-  passwordConfirmField: {fileID: 1098627914}
-  registrationErrorText: {fileID: 400306100}
-  registrationCompleteText: {fileID: 2098382770}
-  submissionText: {fileID: 2041385071}
-  submissionErrorText: {fileID: 298071863}
-  session: {fileID: 11400000, guid: 5e7cac8f3d475044cbe0e80fcdc27fff, type: 2}
---- !u!4 &1692004233
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1692004231}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 567.557, y: 650.03125, z: -2.1172588}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1839832534
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5005,3 +4964,117 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &8357935741741321915
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8357935741150535996, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: m_Name
+      value: LoginManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357935741150535986, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 567.557
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357935741150535986, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 650.03125
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357935741150535986, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.1172588
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357935741150535986, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357935741150535986, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357935741150535986, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357935741150535986, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357935741150535986, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357935741150535986, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357935741150535986, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357935741150535986, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357935741150535987, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: usernameField
+      value: 
+      objectReference: {fileID: 547443732}
+    - target: {fileID: 8357935741150535987, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: passwordField
+      value: 
+      objectReference: {fileID: 1375160361}
+    - target: {fileID: 8357935741150535987, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: usernameRegisterField
+      value: 
+      objectReference: {fileID: 1014621008}
+    - target: {fileID: 8357935741150535987, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: passwordRegisterField
+      value: 
+      objectReference: {fileID: 1541286248}
+    - target: {fileID: 8357935741150535987, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: passwordConfirmField
+      value: 
+      objectReference: {fileID: 1098627914}
+    - target: {fileID: 8357935741150535987, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: registrationErrorText
+      value: 
+      objectReference: {fileID: 400306100}
+    - target: {fileID: 8357935741150535987, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: registrationCompleteText
+      value: 
+      objectReference: {fileID: 2098382770}
+    - target: {fileID: 8357935741150535987, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: submissionText
+      value: 
+      objectReference: {fileID: 2041385071}
+    - target: {fileID: 8357935741150535987, guid: 2583a1ef2858011459af21bf0b666889,
+        type: 3}
+      propertyPath: submissionErrorText
+      value: 
+      objectReference: {fileID: 298071863}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2583a1ef2858011459af21bf0b666889, type: 3}
