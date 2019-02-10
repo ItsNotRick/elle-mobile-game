@@ -3,102 +3,10 @@ using System.Collections.Generic;
 using UnityEngine.Networking;
 using UnityEngine;
 using Newtonsoft.Json;
+using System.IO;
+using System.IO.Compression;
 using System;
-
-
-// This class is utilized in both this script and the "VoiceQuizMechanics" script.
-// This class stores the language pack pulled at the start of the scene.
-public class LanguagePacksContainer
-{
-    public ArrayList terms;
-    public ArrayList englishTerms;
-    public ArrayList imagesForTerms;
-
-    public LanguagePacksContainer(string[] items, string name)
-    {
-        terms = new ArrayList();
-        englishTerms = new ArrayList();
-        imagesForTerms = new ArrayList();
-
-        string[] parsed, termsParsed, englishParsed, imagesParsed;
-        for (int i = 0; i < items.Length/* - 1*/; i++)
-        {
-            parsed = items[i].Split('|');
-            termsParsed = parsed[0].Split('&');
-            englishParsed = parsed[1].Split('&');
-            imagesParsed = parsed[5].Split('&');
-
-            // Adds the fields to the corresponding arraylists
-            if (parsed[2].Contains(name))
-            {
-                terms.Add(termsParsed[1]);
-                englishTerms.Add(englishParsed[1]);
-                imagesForTerms.Add(imagesParsed[1]);
-            }
-        }
-    }
-
-    public void PrintLanguagePack()
-    {
-        for (int i = 0; i < terms.Count; i++)
-        {
-            Debug.Log(terms[i] + " : " + englishTerms[i] + " : " + imagesForTerms[i]);
-        }
-    }
-
-    public int[] GenerateThreeTerms()
-    {
-        HashSet<string> hash = new HashSet<string>();
-        int[] indexes = new int[3];
-
-        int j = 0;
-        while (hash.Count < 3)
-        {
-            System.Random r = new System.Random();
-            int i = r.Next(0, terms.Count - 2);
-            if (hash.Add(terms[i].ToString()))
-            {
-                indexes[j++] = i;
-            }
-        }
-
-        return indexes;
-    }
-
-    public string[] GenerateSingleTerm()
-    {
-        HashSet<string> hash = new HashSet<string>();
-        string[] wordGenerated = new string[2];
-
-        System.Random r = new System.Random();
-        int i = r.Next(0, terms.Count - 2);
-
-        wordGenerated[0] = terms[i].ToString();
-        wordGenerated[1] = englishTerms[i].ToString();
-
-        return wordGenerated;
-    }
-
-    public int GetSize()
-    {
-        return terms.Count;
-    }
-
-    public void RemoveTermsWithNoImages()
-    {
-        // Note with each removal the terms.Count changes so we must adjust i accordingly
-        for (int i = 0; i < terms.Count; i++)
-        {
-            if (imagesForTerms[i].ToString() == "")
-            {
-                terms.RemoveAt(i);
-                englishTerms.RemoveAt(i);
-                imagesForTerms.RemoveAt(i);
-                i--;
-            }
-        }
-    }
-}
+using UnityEditor;
 
 [CreateAssetMenu]
 public class SessionManager : ScriptableObject
@@ -109,12 +17,47 @@ public class SessionManager : ScriptableObject
     [SerializeField]
     public string id = "";
 
-    //public Dictionary<Tuple<int, string>, string> deckPaths;
+    [SerializeField]
+    public string baseURL = "https://endlesslearner.com";
 
     public List<DeckInfo> decks;
 
+    // TODO: Redownload if hash doesn't match!
+    public IEnumerator DownloadDecks()
+    {
+        List<DeckInfo> invalids = new List<DeckInfo>();
+        foreach (DeckInfo d in this.decks)
+        {
+            string packPath = "Assets/LanguagePacks/" + d.id;
+            UnityWebRequest www = UnityWebRequest.Get(baseURL + "deck/zip/" + d.id);
+            www.SetRequestHeader("Authorization", "Bearer " + this.access_token);
+            yield return www.SendWebRequest();
+            if (Directory.Exists(packPath)) Directory.Delete(packPath, true);
+            using (BinaryWriter writer = new BinaryWriter(File.Open(packPath + ".zip", FileMode.Create)))
+            {
+                writer.Write(www.downloadHandler.data);
+            }
+            if (new FileInfo(packPath + ".zip").Length < 50)
+            {
+                invalids.Add(d);
+            }
+            else
+            {
+                ZipFile.ExtractToDirectory(packPath + ".zip", packPath);
+            }
+            File.Delete(packPath + ".zip");
+        }
+        foreach (DeckInfo d in invalids)
+        {
+            this.decks.Remove(d);
+        }
+        foreach (var t in this.decks)
+        {
+            Debug.Log(t);
+        }
+        EditorUtility.SetDirty(this);
+    }
 }
-
 
 public class DecksJson
 {
@@ -133,3 +76,5 @@ public class DeckInfo
     public int id;
     public string name;
 }
+
+

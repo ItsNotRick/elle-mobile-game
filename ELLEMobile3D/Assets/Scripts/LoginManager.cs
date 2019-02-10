@@ -5,12 +5,10 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEditor;
 using System.Text.RegularExpressions;
-using System;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 using System.Linq;
-using System.IO;
-using System.IO.Compression;
+
 
 public class Account
 {
@@ -193,43 +191,7 @@ public class LoginManager : MonoBehaviour
             session.decks = deckLists.ids.Zip(deckLists.names, (a, b) => new DeckInfo(a, b)).ToList();
             //Debug.Log(decks);
             EditorUtility.SetDirty(session);
-            yield return StartCoroutine(DownloadDecks());
+            yield return StartCoroutine(session.DownloadDecks());
         }
     }
-
-    // TODO: Redownload if hash doesn't match!
-    IEnumerator DownloadDecks()
-    {
-        List<DeckInfo> invalids = new List<DeckInfo>();
-        foreach (DeckInfo d in session.decks)
-        {
-            string packPath = "Assets/LanguagePacks/" + d.id;
-            UnityWebRequest www = UnityWebRequest.Get(baseURL + "deck/zip/" + d.id);
-            www.SetRequestHeader("Authorization", "Bearer " + session.access_token);
-            yield return www.SendWebRequest();
-            if (Directory.Exists(packPath)) Directory.Delete(packPath, true);
-            using (BinaryWriter writer = new BinaryWriter(File.Open(packPath + ".zip", FileMode.Create)))
-            {
-                writer.Write(www.downloadHandler.data);
-            }
-            if (new FileInfo(packPath + ".zip").Length < 50)
-            {
-                invalids.Add(d);
-            } else
-            {
-                ZipFile.ExtractToDirectory(packPath + ".zip", packPath);
-            }
-            File.Delete(packPath + ".zip");
-        }
-        foreach (DeckInfo d in invalids)
-        {
-            session.decks.Remove(d);
-        }
-        foreach (var t in session.decks)
-        {
-            Debug.Log(t);
-        }
-        EditorUtility.SetDirty(session);
-    }
-
 }

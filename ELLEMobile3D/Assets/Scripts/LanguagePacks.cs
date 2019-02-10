@@ -45,9 +45,10 @@ public class LanguagePacks : MonoBehaviour
 
 	public void SelectButton()
 	{
-		PlayerPrefs.SetString("Language Pack", languages[selected % (languages.Length)].name);
-		testText.text = PlayerPrefs.GetString("Language Pack");
-	}
+		PlayerPrefs.SetString("Language Pack Name", languages[selected % (languages.Length)].name);
+		testText.text = PlayerPrefs.GetString("Language Pack Name");
+        PlayerPrefs.SetInt("Language Pack ID", languages[selected % (languages.Length)].id);
+    }
 
 	public void BackToMainMenu()
 	{
