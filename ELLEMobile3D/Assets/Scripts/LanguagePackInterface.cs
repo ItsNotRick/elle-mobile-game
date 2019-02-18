@@ -31,7 +31,7 @@ public class LanguagePackInterface
     public LanguagePackInterface(DeckInfo deck)
     {
         Cards = new List<Card>();
-        packPath = "Assets/LanguagePacks/" + deck.id + "/";
+        packPath = Application.persistentDataPath + "/Packs/" + deck.id + "/";
         string csvPath = packPath + "Deck_" + deck.id + ".csv";
         string imgBase = packPath + "Images/";
         string[] images = Directory.EnumerateFiles(imgBase, "*.*")

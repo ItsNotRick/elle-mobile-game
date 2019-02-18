@@ -164,7 +164,7 @@ public class LoginManager : MonoBehaviour
             session.access_token = user.access_token;
             session.id = user.id;
             yield return StartCoroutine(GetDeckNames());
-            EditorUtility.SetDirty(session);
+            //EditorUtility.SetDirty(session);
             SceneManager.LoadScene("MainMenu");
         }
         else
@@ -190,7 +190,7 @@ public class LoginManager : MonoBehaviour
             DecksJson deckLists = JsonConvert.DeserializeObject<DecksJson>(decks);
             session.decks = deckLists.ids.Zip(deckLists.names, (a, b) => new DeckInfo(a, b)).ToList();
             //Debug.Log(decks);
-            EditorUtility.SetDirty(session);
+            //EditorUtility.SetDirty(session);
             yield return StartCoroutine(session.DownloadDecks());
         }
     }

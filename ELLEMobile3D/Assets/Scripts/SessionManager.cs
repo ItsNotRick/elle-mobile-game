@@ -18,7 +18,7 @@ public class SessionManager : ScriptableObject
     public string id = "";
 
     [SerializeField]
-    public string baseURL = "https://endlesslearner.com";
+    public string baseURL = "https://endlesslearner.com/";
 
     public List<DeckInfo> decks;
 
@@ -28,16 +28,18 @@ public class SessionManager : ScriptableObject
         List<DeckInfo> invalids = new List<DeckInfo>();
         foreach (DeckInfo d in this.decks)
         {
-            string packPath = "Assets/LanguagePacks/" + d.id;
-            UnityWebRequest www = UnityWebRequest.Get(baseURL + "deck/zip/" + d.id);
-            www.SetRequestHeader("Authorization", "Bearer " + this.access_token);
+            string packPath = Application.persistentDataPath + @"/Packs/" + d.id;
+            UnityWebRequest www = UnityWebRequest.Get(baseURL + @"deck/zip/" + d.id);
+            www.SetRequestHeader(@"Authorization", @"Bearer " + this.access_token);
             yield return www.SendWebRequest();
             if (Directory.Exists(packPath)) Directory.Delete(packPath, true);
+            Directory.CreateDirectory(packPath);
             using (BinaryWriter writer = new BinaryWriter(File.Open(packPath + ".zip", FileMode.Create)))
             {
                 writer.Write(www.downloadHandler.data);
             }
-            if (new FileInfo(packPath + ".zip").Length < 50)
+            var fInfo = new FileInfo(packPath + ".zip");
+            if (fInfo.Length < 50)
             {
                 invalids.Add(d);
             }
@@ -55,7 +57,7 @@ public class SessionManager : ScriptableObject
         {
             Debug.Log(t);
         }
-        EditorUtility.SetDirty(this);
+        //EditorUtility.SetDirty(this);
     }
 }
 

@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67559755af176624a9c09dd55eedc390, type: 3}
   m_Name: sesh
   m_EditorClassIdentifier: 
-  access_token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NDkyNjIzMDMsIm5iZiI6MTU0OTI2MjMwMywianRpIjoiNTRhZWFkZjUtOTI1ZS00MjE4LWI4ZGMtMjE5NmM0NzU3MTgxIiwiaWRlbnRpdHkiOjMwMTMsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.UyDrib1cg1jdyn7R_2wnYKxSzpL8lK0PAkJmPAzhJsI
-  id: 3013
+  access_token: 
+  id: 
+  baseURL: https://endlesslearner.com/
+  decks: []
