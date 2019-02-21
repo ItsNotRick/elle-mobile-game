@@ -18,7 +18,7 @@ public class SessionManager : ScriptableObject
     public string id = "";
 
     [SerializeField]
-    public string baseURL = "https://endlesslearner.com";
+    public string baseURL = "https://endlesslearner.com/";
 
     public List<DeckInfo> decks;
 
