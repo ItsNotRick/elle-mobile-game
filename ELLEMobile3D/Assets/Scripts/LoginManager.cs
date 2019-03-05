@@ -28,7 +28,7 @@ public class LoginManager : MonoBehaviour
     private SessionManager session;
 
     private static string baseURL = "https://endlesslearner.com/";
-	private static string createAccountURL = baseURL + "register";
+	  private static string createAccountURL = baseURL + "register";
     private static string loginAccountURL = baseURL + "login";
 
     private bool usernameTaken;
@@ -99,22 +99,22 @@ public class LoginManager : MonoBehaviour
 		}
     }
 
-	public void OnBackClick()
+    public void OnBackClick()
     {
         usernameRegisterField.text = "";
         passwordRegisterField.text = "";
         passwordConfirmField.text = "";
         registrationErrorText.text = "";
         registrationCompleteText.text = "";
-		usernameRegisterField.text = "";
-		passwordRegisterField.text = "";
-		passwordConfirmField.text = "";
-		submissionErrorText.text = "";
-		submissionText.text = "";		
-	}
+        usernameRegisterField.text = "";
+        passwordRegisterField.text = "";
+        passwordConfirmField.text = "";
+        submissionErrorText.text = "";
+        submissionText.text = "";
+    }
 
-	IEnumerator RegisterAccount(string username, string passwordHash)
-	{
+    IEnumerator RegisterAccount(string username, string passwordHash)
+    {
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>
         {
             // Fields must be the same as they are in the Python script on the server

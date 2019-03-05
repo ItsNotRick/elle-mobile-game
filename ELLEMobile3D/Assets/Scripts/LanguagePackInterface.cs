@@ -50,7 +50,7 @@ public class LanguagePackInterface
                     sourceTerm = r.English,
                     img = new Texture2D(2, 2)
                 });
-                string exp = @"[\s\S]*(" + r.id + @")[\s\S]*(.jpg|.png)";
+                string exp = packPath + @"[\s\S]*(" + r.id + @")[\s\S]*(.jpg|.png)";
                 Regex reg = new Regex(exp);
                 string imgPath = images.Where(path => reg.IsMatch(path)).First();
                 byte[] fileBytes = File.ReadAllBytes(imgPath);
@@ -76,7 +76,7 @@ public class LanguagePackInterface
         while (hash.Count < 3)
         {
             System.Random r = new System.Random();
-            int i = r.Next(0, Cards.Count - 2);
+            int i = r.Next(0, Cards.Count);
             if (hash.Add(Cards[i].destTerm.ToString()))
             {
                 indexes[j++] = i;
