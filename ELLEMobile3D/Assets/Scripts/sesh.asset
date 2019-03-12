@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   access_token: 
   id: 
-  baseURL: https://endlesslearner.com
+  baseURL: https://endlesslearner.com/
   decks: []

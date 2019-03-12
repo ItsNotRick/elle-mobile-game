@@ -21,7 +21,7 @@ public class SignOutButton : MonoBehaviour
     {
         session.access_token = "";
         session.id = "";
-        EditorUtility.SetDirty(session);
+        //EditorUtility.SetDirty(session);
         SceneManager.LoadScene("Login");
     }
 

@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
-using System.IO.Compression;
+using Ionic;
 using System;
 using UnityEditor;
 
@@ -28,22 +28,44 @@ public class SessionManager : ScriptableObject
         List<DeckInfo> invalids = new List<DeckInfo>();
         foreach (DeckInfo d in this.decks)
         {
-            string packPath = "Assets/LanguagePacks/" + d.id;
-            UnityWebRequest www = UnityWebRequest.Get(baseURL + "deck/zip/" + d.id);
-            www.SetRequestHeader("Authorization", "Bearer " + this.access_token);
+            string packPath = Application.persistentDataPath + @"/Packs/" + d.id;
+            UnityWebRequest www = UnityWebRequest.Get(baseURL + @"deck/zip/" + d.id);
+            www.SetRequestHeader(@"Authorization", @"Bearer " + this.access_token);
             yield return www.SendWebRequest();
             if (Directory.Exists(packPath)) Directory.Delete(packPath, true);
+            Directory.CreateDirectory(packPath);
             using (BinaryWriter writer = new BinaryWriter(File.Open(packPath + ".zip", FileMode.Create)))
             {
                 writer.Write(www.downloadHandler.data);
             }
-            if (new FileInfo(packPath + ".zip").Length < 50)
+            var fInfo = new FileInfo(packPath + ".zip");
+            if (fInfo.Length < 50)
             {
                 invalids.Add(d);
             }
             else
             {
-                ZipFile.ExtractToDirectory(packPath + ".zip", packPath);
+                var opts = new Ionic.Zip.ReadOptions
+                {
+                    Encoding = System.Text.Encoding.GetEncoding(65001)
+                };
+                using (Ionic.Zip.ZipFile outZip = Ionic.Zip.ZipFile.Read(packPath + ".zip", opts))
+                {
+                    foreach (Ionic.Zip.ZipEntry e in outZip)
+                    {
+                        if (e.IsDirectory)
+                        {
+                            Directory.CreateDirectory(packPath + "/" + e.FileName);
+                        }
+                        else
+                        {
+                            using (FileStream stream = new FileStream(packPath + "/" + e.FileName, FileMode.Create))
+                            {
+                                e.Extract(stream);
+                            }
+                        }
+                    }
+                }
             }
             File.Delete(packPath + ".zip");
         }
@@ -55,7 +77,7 @@ public class SessionManager : ScriptableObject
         {
             Debug.Log(t);
         }
-        EditorUtility.SetDirty(this);
+        //EditorUtility.SetDirty(this);
     }
 }
 

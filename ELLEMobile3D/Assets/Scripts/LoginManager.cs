@@ -28,7 +28,7 @@ public class LoginManager : MonoBehaviour
     private SessionManager session;
 
     private static string baseURL = "https://endlesslearner.com/";
-	private static string createAccountURL = baseURL + "register";
+	  private static string createAccountURL = baseURL + "register";
     private static string loginAccountURL = baseURL + "login";
 
     private bool usernameTaken;
@@ -99,22 +99,22 @@ public class LoginManager : MonoBehaviour
 		}
     }
 
-	public void OnBackClick()
+    public void OnBackClick()
     {
         usernameRegisterField.text = "";
         passwordRegisterField.text = "";
         passwordConfirmField.text = "";
         registrationErrorText.text = "";
         registrationCompleteText.text = "";
-		usernameRegisterField.text = "";
-		passwordRegisterField.text = "";
-		passwordConfirmField.text = "";
-		submissionErrorText.text = "";
-		submissionText.text = "";		
-	}
+        usernameRegisterField.text = "";
+        passwordRegisterField.text = "";
+        passwordConfirmField.text = "";
+        submissionErrorText.text = "";
+        submissionText.text = "";
+    }
 
-	IEnumerator RegisterAccount(string username, string passwordHash)
-	{
+    IEnumerator RegisterAccount(string username, string passwordHash)
+    {
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>
         {
             // Fields must be the same as they are in the Python script on the server
@@ -164,7 +164,7 @@ public class LoginManager : MonoBehaviour
             session.access_token = user.access_token;
             session.id = user.id;
             yield return StartCoroutine(GetDeckNames());
-            EditorUtility.SetDirty(session);
+            //EditorUtility.SetDirty(session);
             SceneManager.LoadScene("MainMenu");
         }
         else
@@ -190,7 +190,7 @@ public class LoginManager : MonoBehaviour
             DecksJson deckLists = JsonConvert.DeserializeObject<DecksJson>(decks);
             session.decks = deckLists.ids.Zip(deckLists.names, (a, b) => new DeckInfo(a, b)).ToList();
             //Debug.Log(decks);
-            EditorUtility.SetDirty(session);
+            //EditorUtility.SetDirty(session);
             yield return StartCoroutine(session.DownloadDecks());
         }
     }
