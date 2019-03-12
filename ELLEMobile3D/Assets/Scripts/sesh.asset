@@ -12,13 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d40b719a606b6cd4598510281e5fd8ee, type: 3}
   m_Name: sesh
   m_EditorClassIdentifier: 
-  access_token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTE3NTA2MjUsIm5iZiI6MTU1MTc1MDYyNSwianRpIjoiODZhMTA0YzYtNDc1Yi00YTE1LTk4MmEtN2UyYTNhNjNlNzQyIiwiaWRlbnRpdHkiOjMwMTMsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.WT87YCRxXNud3exj5bl1pKHXdKjZhhHlcMvfg1VrnhA
-  id: 3013
+  access_token: 
+  id: 
   baseURL: https://endlesslearner.com/
-  decks:
-  - id: 300
-    name: Spanish Fundamental Vocab 1
-  - id: 301
-    name: Portuguese Basics
-  - id: 304
-    name: "\u65E5\u672C\u8A9E"
+  decks: []

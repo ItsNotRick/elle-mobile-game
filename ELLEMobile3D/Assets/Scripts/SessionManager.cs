@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
-using System.IO.Compression;
+using Ionic;
 using System;
 using UnityEditor;
 
@@ -45,7 +45,27 @@ public class SessionManager : ScriptableObject
             }
             else
             {
-                ZipFile.ExtractToDirectory(packPath + ".zip", packPath);
+                var opts = new Ionic.Zip.ReadOptions
+                {
+                    Encoding = System.Text.Encoding.GetEncoding(65001)
+                };
+                using (Ionic.Zip.ZipFile outZip = Ionic.Zip.ZipFile.Read(packPath + ".zip", opts))
+                {
+                    foreach (Ionic.Zip.ZipEntry e in outZip)
+                    {
+                        if (e.IsDirectory)
+                        {
+                            Directory.CreateDirectory(packPath + "/" + e.FileName);
+                        }
+                        else
+                        {
+                            using (FileStream stream = new FileStream(packPath + "/" + e.FileName, FileMode.Create))
+                            {
+                                e.Extract(stream);
+                            }
+                        }
+                    }
+                }
             }
             File.Delete(packPath + ".zip");
         }
