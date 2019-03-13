@@ -6,15 +6,14 @@ using UnityEngine.Networking;
 using UnityEditor;
 using System.Text.RegularExpressions;
 using UnityEngine.SceneManagement;
-using Newtonsoft.Json;
 using System.Linq;
 
 
 public class Account
 {
-    public string id { get; set; }
-    public string access_token { get; set; }
-    public string permissions { get; set; }
+    public string id; //{ get; set; }
+    public string access_token; //{ get; set; }
+    public string permissions; //{ get; set; }
 }
 
 
@@ -37,13 +36,12 @@ public class LoginManager : MonoBehaviour
 	void Start ()
     {
         usernameTaken = false;
-        //session = ScriptableObject.Instantiate<SessionManager>();
-
-		if (PlayerPrefs.GetString("Username").Length > 0)
-		{
-			usernameField.text = PlayerPrefs.GetString("Username");
-			passwordField.text = PlayerPrefs.GetString("Password");
-		}
+        string potentialSession = PlayerPrefs.GetString("session");
+        if (session == null)
+        {
+            session = ScriptableObject.CreateInstance<SessionManager>();
+        }
+        JsonUtility.FromJsonOverwrite(potentialSession, session);
 
         //TODO Actually test connection here!
         if (session.access_token.Length > 0)
@@ -55,7 +53,6 @@ public class LoginManager : MonoBehaviour
     public void OnLoginClick()
     {
         string username = usernameField.text;
-		PlayerPrefs.SetString("Password", passwordField.text);
 		string password = passwordField.text;
 
 		StartCoroutine(LoginAccount(username, password));
@@ -156,20 +153,27 @@ public class LoginManager : MonoBehaviour
 
         string dat = www.downloadHandler.text;
 
-        if (!dat.Contains("Invalid credentials!"))
+        if (!dat.Contains("Invalid credentials!") && dat != null)
         {
-            Account user = JsonConvert.DeserializeObject<Account>(dat);
+            Account user = JsonUtility.FromJson<Account>(dat);
             submissionText.text = user.id + " - logging in...";
             submissionErrorText.text = "";
             session.access_token = user.access_token;
             session.id = user.id;
             yield return StartCoroutine(GetDeckNames());
             //EditorUtility.SetDirty(session);
+            PlayerPrefs.SetString("session", JsonUtility.ToJson(session));
             SceneManager.LoadScene("MainMenu");
         }
         else
         {
-            submissionErrorText.text = dat;
+            if (dat == null)
+            {
+                submissionErrorText.text = "Unable to connect to server.";
+            }
+            else {
+                submissionErrorText.text = dat;
+            }
             submissionText.text = "";
         }
     }
@@ -187,7 +191,7 @@ public class LoginManager : MonoBehaviour
 
         if (!decks.Contains("Invalid credentials!"))
         {
-            DecksJson deckLists = JsonConvert.DeserializeObject<DecksJson>(decks);
+            DecksJson deckLists = JsonUtility.FromJson<DecksJson>(decks);
             session.decks = deckLists.ids.Zip(deckLists.names, (a, b) => new DeckInfo(a, b)).ToList();
             //Debug.Log(decks);
             //EditorUtility.SetDirty(session);

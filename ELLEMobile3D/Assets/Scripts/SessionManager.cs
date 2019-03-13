@@ -83,8 +83,8 @@ public class SessionManager : ScriptableObject
 
 public class DecksJson
 {
-    public List<int> ids { get; set; }
-    public List<string> names { get; set; }
+    public List<int> ids; //{ get; set; }
+    public List<string> names; //{ get; set; }
 }
 
 [Serializable]
