@@ -41,7 +41,7 @@ public class MarklessAR : MonoBehaviour
 		// If back cam is not found
 		if (cam == null)
 		{
-			Debug.Log("Device does not have a camera");
+			Debug.Log("Device does not have a rear facing camera");
 			return;
 		}
 

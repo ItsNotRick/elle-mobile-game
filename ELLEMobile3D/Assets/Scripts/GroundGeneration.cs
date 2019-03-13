@@ -135,7 +135,7 @@ public class GroundGeneration : MonoBehaviour {
             SpawnQuizChoices(2, 2);
             int correct = Random.Range(0, 3);
             incorrect.Add(fullWordOptions[0] + "," + fullWordOptions[1] +","+fullWordOptions[2]+"," );
-            generatedWordDisplay.text = languagePack.Cards[indexes[correct]].destTerm.ToString();
+            generatedWordDisplay.text = languagePack.Cards[indexes[correct]].destTerm;
 
             // This loop spawns platforms after the quiz cards
             for (int i = 0; i < 5; i++)
@@ -257,7 +257,7 @@ public class GroundGeneration : MonoBehaviour {
         choiceText.GetComponent<SpriteRenderer>().drawMode = SpriteDrawMode.Sliced;
         choiceText.GetComponent<SpriteRenderer>().size = new Vector2(24, 6);
 
-        choiceText.name = languagePack.Cards[indexes[choiceIndex]].destTerm.ToString();
+        choiceText.name = languagePack.Cards[indexes[choiceIndex]].destTerm;
         fullWordOptions[choiceIndex] = choiceText.name;
     }
 }
