@@ -27,7 +27,7 @@ public class LoginManager : MonoBehaviour
     private SessionManager session;
 
     private static string baseURL = "https://endlesslearner.com/";
-	  private static string createAccountURL = baseURL + "register";
+	private static string createAccountURL = baseURL + "register";
     private static string loginAccountURL = baseURL + "login";
 
     private bool usernameTaken;
@@ -66,19 +66,17 @@ public class LoginManager : MonoBehaviour
 		submissionText.text = "";
 	}
 
+    // There currently aren't any password restrictions built into the web service, the error checking should happen
+    // on the server and the message should get sent back and displayed. This way a change to the service will
+    // immediately be in effect for all users of the API.
     public void OnSubmitClick()
     {
-		// Check if username is too long or short
-		if (usernameRegisterField.text.Length < 2 || usernameRegisterField.text.Length > 8)
-		{
-			registrationErrorText.text = "Username must be between 2-8 characters long";
-		}
 		// Ensures the username is only letters and numbers
-		else if (!Regex.IsMatch(usernameRegisterField.text, @"^[a-zA-Z0-9]+$"))
+		if (!Regex.IsMatch(usernameRegisterField.text, @"^[a-zA-Z0-9]+$"))
 		{
 			registrationErrorText.text = "Username can only contain letters and numbers";
 		}
-		else if (passwordRegisterField.text.Length < 4 || passwordRegisterField.text.Length > 20)
+		else if (passwordRegisterField.text.Length < 4)// || passwordRegisterField.text.Length > 20)
 		{
 			registrationErrorText.text = "Password must be between 4-20 characters long";
 		}
@@ -90,9 +88,8 @@ public class LoginManager : MonoBehaviour
 		// Account registration information is valid
 		else
 		{
-			string password = passwordRegisterField.text;
 
-			StartCoroutine(RegisterAccount(usernameRegisterField.text, password));
+			StartCoroutine(RegisterAccount(usernameRegisterField.text, passwordRegisterField.text));//password));
 		}
     }
 
@@ -110,28 +107,38 @@ public class LoginManager : MonoBehaviour
         submissionText.text = "";
     }
 
-    IEnumerator RegisterAccount(string username, string passwordHash)
+    class RegMsg {
+        public string message;
+    }
+
+   IEnumerator RegisterAccount(string username, string password)
     {
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>
         {
             // Fields must be the same as they are in the Python script on the server
-            new MultipartFormDataSection("username", "ii"),
-            new MultipartFormDataSection("password", "ii"),
+            new MultipartFormDataSection("username", username),
+            new MultipartFormDataSection("password", password),
         };
 
         UnityWebRequest www = UnityWebRequest.Post(createAccountURL, formData);
-		yield return www;
+		yield return www.SendWebRequest();
+        long responseCode = www.responseCode;
+        RegMsg regResult = JsonUtility.FromJson<RegMsg>(www.downloadHandler.text);
 
-        if (www.downloadHandler.text.ToString().Contains("User already exists"))
+        if (responseCode == 400)
         {
-            registrationErrorText.text = "Username already exists";
+            registrationErrorText.text = regResult.message;
             registrationCompleteText.text = "";
             usernameTaken = true;
         }
-        else
+        else if (responseCode == 201)
         {
             registrationErrorText.text = "";
-            registrationCompleteText.text = "Registration Complete!";
+            registrationCompleteText.text = regResult.message;
+        }
+        else
+        {
+            registrationErrorText.text = "Unkown Error Occurred";
         }
 
         // Resets the password fields
