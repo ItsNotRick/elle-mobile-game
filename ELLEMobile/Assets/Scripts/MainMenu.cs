@@ -14,6 +14,9 @@ public class MainMenu : MonoBehaviour
 	public AudioSource menuMusic;
 	public MusicPlayer musicPlayer;
 
+	[SerializeField]
+	SessionManager session;
+
 	public void Start()
 	{
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -51,8 +54,10 @@ public class MainMenu : MonoBehaviour
 
 	public void LogoutButton()
 	{
-		PlayerPrefs.SetString("Username", "");
-		PlayerPrefs.SetString("Password", "");
+		session.access_token = "";
+		session.id = "";
+		PlayerPrefs.DeleteKey("session");
+		// EditorUtility.SetDirty(session);
 		SceneManager.LoadScene("Login");
 	}
 

@@ -26,7 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoseScreen.unity
     guid: d1e1593a5bb6a534baf3e049dc33ef56
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SpeechRecognitionLevel.unity
     guid: 2c84f01d23bb29f49a815c09ffb6a449
   - enabled: 1
