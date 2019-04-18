@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class ARQuizMechanics : MonoBehaviour 
 {
@@ -24,9 +25,12 @@ public class ARQuizMechanics : MonoBehaviour
     [SerializeField]
     private SessionManager session;
 
+    private static string baseURL = "https://endlesslearner.com/";
+    private static string statsURL = baseURL + "insertstats";
+
 
     // Analytics data
-	private string dataURL = "http://10.171.204.188/ELLEMobile/PushAnalyticsHS.php";
+    private string dataURL = "http://10.171.204.188/ELLEMobile/PushAnalyticsHS.php";
 
     int totalCorrect, totalIncorrect;
     float playedTime;
@@ -82,6 +86,29 @@ public class ARQuizMechanics : MonoBehaviour
 
         // Updates the played time since level load
         playedTime += Time.deltaTime;
+
+        if (totalCorrect + totalIncorrect == 5)
+        {
+            totalCorrect = totalIncorrect = 0;
+            StartCoroutine(PushStats());
+        }
+    }
+
+    IEnumerator PushStats()
+    {
+        List<IMultipartFormSection> formData = new List<IMultipartFormSection>
+        {
+
+            new MultipartFormDataSection("userID", PlayerPrefs.GetInt("UserID").ToString()),
+            new MultipartFormDataSection("deck_ID", PlayerPrefs.GetInt("Language Pack ID").ToString()),
+            new MultipartFormDataSection("correct", totalCorrect.ToString()),
+            new MultipartFormDataSection("incorrect", totalIncorrect.ToString()),
+            new MultipartFormDataSection("score", "0"),
+
+            new MultipartFormDataSection("platform", "ELLE Mobile 3D"),
+        };
+        UnityWebRequest www = UnityWebRequest.Post(statsURL, formData);
+        yield return www.SendWebRequest();
     }
 
     public void PushAnalytics()
