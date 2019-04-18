@@ -170,6 +170,7 @@ public class LoginManager : MonoBehaviour
             yield return StartCoroutine(GetDeckNames());
             //EditorUtility.SetDirty(session);
             PlayerPrefs.SetString("session", JsonUtility.ToJson(session));
+            PlayerPrefs.SetInt("UserID", int.Parse(user.id));
             SceneManager.LoadScene("MainMenu");
         }
         else
