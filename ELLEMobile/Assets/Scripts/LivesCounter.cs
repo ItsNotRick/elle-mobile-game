@@ -24,6 +24,8 @@ public class LivesCounter : MonoBehaviour
 		{
 			ourSC = FindObjectOfType<ScoreGenerator>();
 			PlayerPrefs.SetFloat("Player Score", ourSC.scoreCount);
+            PlayerStats stats = new PlayerStats();
+            stats.PushStatsHelper();
 			SceneManager.LoadScene("LoseScreen");
 		}
 	}

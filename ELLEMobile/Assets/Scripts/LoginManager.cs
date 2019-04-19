@@ -164,6 +164,7 @@ public class LoginManager : MonoBehaviour
         {
             Account user = JsonUtility.FromJson<Account>(dat);
             submissionText.text = user.id + " - logging in...";
+            PlayerPrefs.SetString("userid", user.id);
             submissionErrorText.text = "";
             session.access_token = user.access_token;
             session.id = user.id;

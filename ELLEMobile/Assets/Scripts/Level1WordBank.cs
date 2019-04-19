@@ -94,6 +94,7 @@ public class Level1WordBank : MonoBehaviour
         {
             // Lose a life here
             PlayerPrefs.SetInt("Lives", PlayerPrefs.GetInt("Lives") - 1);
+            PlayerPrefs.SetInt("incorrect", PlayerPrefs.GetInt("incorrect") + 1);
 
             // Update life counter on UI
             lifeCounter.text = "Lives: " + PlayerPrefs.GetInt("Lives");
@@ -112,6 +113,7 @@ public class Level1WordBank : MonoBehaviour
         // The user chose the right word
         else if (selectedWord.text == languagePack.Cards[indexes[correctIndex]].sourceTerm)
         {
+            PlayerPrefs.SetInt("correct", PlayerPrefs.GetInt("correct") + 1);
             if (PlayerPrefs.GetInt("Sound Toggle") == 1)
             {
                 Debug.Log("Correct sound!");
@@ -127,7 +129,7 @@ public class Level1WordBank : MonoBehaviour
         {
             // Lose a life here
             PlayerPrefs.SetInt("Lives", PlayerPrefs.GetInt("Lives") - 1);
-
+            PlayerPrefs.SetInt("incorrect", PlayerPrefs.GetInt("incorrect") + 1);
             // Update life counter on UI
             lifeCounter.text = "Lives: " + PlayerPrefs.GetInt("Lives");
             Debug.Log("Lives: " + PlayerPrefs.GetInt("Lives"));
