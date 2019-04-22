@@ -26,6 +26,7 @@ Read these C# files:
 * More obvious, easier to see obstacles
 * Better performance data collection
 * A disabled speech based gamemode could be reworked and re-integrated with the game
+* Audio as a presented word format
 
 ## ELLE Mobile2D
 Most of the Language pack code is the same as Mobile3D, the gameplay is a bit simplistic and there's a huge amount of time the player spends not answering questions. This game could benefit from a gameplay overhaul.
