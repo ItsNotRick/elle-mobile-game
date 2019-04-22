@@ -1,4 +1,4 @@
-##### Website:
+##### Website
 http://endlesslearner.com/
 ##### Main Github Page
 https://github.com/ItsNotRick/elle
