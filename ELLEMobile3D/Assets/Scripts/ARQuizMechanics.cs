@@ -104,8 +104,7 @@ public class ARQuizMechanics : MonoBehaviour
             new MultipartFormDataSection("correct", totalCorrect.ToString()),
             new MultipartFormDataSection("incorrect", totalIncorrect.ToString()),
             new MultipartFormDataSection("score", "0"),
-
-            new MultipartFormDataSection("platform", "ELLE Mobile 3D"),
+            new MultipartFormDataSection("platform", "4"),
         };
         UnityWebRequest www = UnityWebRequest.Post(statsURL, formData);
         yield return www.SendWebRequest();

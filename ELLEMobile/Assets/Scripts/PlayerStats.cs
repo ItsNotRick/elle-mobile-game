@@ -24,7 +24,7 @@ public class PlayerStats : MonoBehaviour
             new MultipartFormFileSection("correct", PlayerPrefs.GetInt("correct").ToString()),
             new MultipartFormFileSection("incorrect", PlayerPrefs.GetInt("incorrect").ToString()),
             new MultipartFormFileSection("score", ((int)PlayerPrefs.GetFloat("Player Score")).ToString()),
-            new MultipartFormFileSection("platform", "ELLE Mobile 2D"),
+            new MultipartFormFileSection("platform", "2"),
         };
 
         string statsURL = "endlesslearner.com/insertstats";
