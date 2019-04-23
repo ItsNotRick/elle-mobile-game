@@ -26,11 +26,11 @@ public class PlayerMovementControls : MonoBehaviour {
     float playedTime;
     string correctWords, incorrectWords;
 
-    private static string baseURL = "https://endlesslearner.com/";
-    private static string statsURL = baseURL + "insertstats";
 
     [SerializeField]
     SessionManager session;
+
+    private static string statsURL = "insertstats";
 
     //Old stats variables **Deprecated**
     bool mutexAnalytics;
@@ -90,14 +90,14 @@ public class PlayerMovementControls : MonoBehaviour {
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>
         {
 
-            new MultipartFormDataSection("userID", session.id.ToString()),
+            new MultipartFormDataSection("userID", session.id),
             new MultipartFormDataSection("deck_ID", PlayerPrefs.GetInt("Language Pack ID").ToString()),
             new MultipartFormDataSection("correct", totalCorrect.ToString()),
             new MultipartFormDataSection("incorrect", totalIncorrect.ToString()),
             new MultipartFormDataSection("score", score.ToString()),
             new MultipartFormDataSection("platform", "3"),
         };
-        UnityWebRequest www = UnityWebRequest.Post(statsURL, formData);
+        UnityWebRequest www = UnityWebRequest.Post(session.baseURL + statsURL, formData);
         yield return www.SendWebRequest();
         long responseCode = www.responseCode;
     }

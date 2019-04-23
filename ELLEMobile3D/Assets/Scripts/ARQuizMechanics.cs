@@ -25,9 +25,8 @@ public class ARQuizMechanics : MonoBehaviour
     [SerializeField]
     private SessionManager session;
 
-    private static string baseURL = "https://endlesslearner.com/";
-    private static string statsURL = baseURL + "insertstats";
-
+    private static string statsURL = "insertstats";
+    
 
     // Analytics data
     private string dataURL = "http://10.171.204.188/ELLEMobile/PushAnalyticsHS.php";
@@ -99,14 +98,14 @@ public class ARQuizMechanics : MonoBehaviour
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>
         {
 
-            new MultipartFormDataSection("userID", PlayerPrefs.GetInt("UserID").ToString()),
+            new MultipartFormDataSection("userID", session.id),
             new MultipartFormDataSection("deck_ID", PlayerPrefs.GetInt("Language Pack ID").ToString()),
             new MultipartFormDataSection("correct", totalCorrect.ToString()),
             new MultipartFormDataSection("incorrect", totalIncorrect.ToString()),
             new MultipartFormDataSection("score", "0"),
             new MultipartFormDataSection("platform", "4"),
         };
-        UnityWebRequest www = UnityWebRequest.Post(statsURL, formData);
+        UnityWebRequest www = UnityWebRequest.Post(session.baseURL + statsURL, formData);
         yield return www.SendWebRequest();
     }
 

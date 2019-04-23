@@ -5,6 +5,8 @@ using UnityEngine.Networking;
 
 public class PlayerStats : MonoBehaviour
 {
+    [SerializeField]
+    private SessionManager session;
 
 	void Start()
 	{
@@ -19,7 +21,7 @@ public class PlayerStats : MonoBehaviour
     {
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>()
         {
-            new MultipartFormFileSection("userID", PlayerPrefs.GetString("userid")),
+            new MultipartFormFileSection("userID", session.id),
             new MultipartFormFileSection("deck_ID", PlayerPrefs.GetInt("Language Pack ID").ToString()),
             new MultipartFormFileSection("correct", PlayerPrefs.GetInt("correct").ToString()),
             new MultipartFormFileSection("incorrect", PlayerPrefs.GetInt("incorrect").ToString()),
@@ -27,7 +29,7 @@ public class PlayerStats : MonoBehaviour
             new MultipartFormFileSection("platform", "2"),
         };
 
-        string statsURL = "endlesslearner.com/insertstats";
+        string statsURL = "https://endlesslearner.com/insertstats";
         UnityWebRequest www = UnityWebRequest.Post(statsURL, formData);
         PlayerPrefs.SetInt("correct", 0);
         PlayerPrefs.SetInt("incorrect", 0);

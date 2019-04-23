@@ -27,8 +27,6 @@ public class LoginManager : MonoBehaviour
     private SessionManager session;
 
     private static string baseURL = "https://endlesslearner.com/";
-	private static string createAccountURL = baseURL + "register";
-    private static string loginAccountURL = baseURL + "login";
 
     private bool usernameTaken;
 	private bool passwordSaved;
@@ -120,7 +118,7 @@ public class LoginManager : MonoBehaviour
             new MultipartFormDataSection("password", password),
         };
 
-        UnityWebRequest www = UnityWebRequest.Post(createAccountURL, formData);
+        UnityWebRequest www = UnityWebRequest.Post(session.baseURL + "register", formData);
 		yield return www.SendWebRequest();
         long responseCode = www.responseCode;
         RegMsg regResult = JsonUtility.FromJson<RegMsg>(www.downloadHandler.text);
@@ -155,7 +153,7 @@ public class LoginManager : MonoBehaviour
             new MultipartFormDataSection("password", password),
         };
 
-        UnityWebRequest www = UnityWebRequest.Post(loginAccountURL, formData);
+        UnityWebRequest www = UnityWebRequest.Post(session.baseURL + "login", formData);
         yield return www.SendWebRequest();
 
         string dat = www.downloadHandler.text;
