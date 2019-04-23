@@ -180,7 +180,7 @@ public class LoginManager : MonoBehaviour
                 submissionErrorText.text = "Unable to connect to server.";
             }
             else {
-                submissionErrorText.text = dat;
+                submissionErrorText.text = "Error: " + dat;
             }
             submissionText.text = "";
         }

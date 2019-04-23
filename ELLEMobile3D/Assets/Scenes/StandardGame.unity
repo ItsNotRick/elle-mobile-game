@@ -1206,6 +1206,7 @@ MonoBehaviour:
   correctPanel: {fileID: 1311282671}
   incorrectPanel: {fileID: 1598771034}
   cameraControl: {fileID: 1012400113}
+  session: {fileID: 11400000, guid: 7952669324e8e2f499058e88e6ebfaf3, type: 2}
 --- !u!65 &1597423934
 BoxCollider:
   m_ObjectHideFlags: 0
